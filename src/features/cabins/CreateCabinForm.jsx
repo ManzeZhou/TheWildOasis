@@ -15,7 +15,7 @@ function CreateCabinForm({cabinToEdit = {}}) {
     const {id: editId, ...editValues} = cabinToEdit;
 
     const isEditSession = Boolean(editId);
-    console.log(isEditSession)
+
 
     const {register, handleSubmit, reset, getValues, formState} = useForm({
         defaultValues: isEditSession ? editValues : {},
@@ -64,7 +64,7 @@ function CreateCabinForm({cabinToEdit = {}}) {
     }
 
     function onError(errors) {
-        // console.log(errors);
+        console.log(errors);
     }
 
     return (
@@ -135,14 +135,13 @@ function CreateCabinForm({cabinToEdit = {}}) {
                     })}/>
             </FormRow>
 
-            <FormRow label="Cabin photo">
+            <FormRow label="Cabin photo" error={errors?.image?.message}>
                 <FileInput
                     id="image"
                     accept="image/*"
                     type="file"
                     {...register("image", {
-                        // TODO doesn't show required message
-                        required: isEditSession ? false : "This field is required",
+                        required: isEditSession ?  false : "This field is required",
                     })}
                 />
             </FormRow>
