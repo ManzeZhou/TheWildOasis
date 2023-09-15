@@ -3,6 +3,8 @@ import {formatCurrency} from "../../utils/helpers.js";
 import {deleteCabin} from "../../services/apiCabins.js";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import {useState} from "react";
+import CreateCabinForm from "./CreateCabinForm.jsx";
 
 const TableRow = styled.div`
   display: grid;
@@ -45,6 +47,8 @@ const Discount = styled.div`
 
 const CabinRow = ({cabin}) => {
 
+    const [showForm, setShowForm] = useState(false);
+
     const {
         id: cabinId,
         name,
@@ -69,14 +73,20 @@ const CabinRow = ({cabin}) => {
         onError: err => toast.error(err.message)
     });
 
-    return <TableRow role="row">
+    return <>
+    <TableRow role="row">
         <img src={image}/>
         <Cabin>{name}</Cabin>
         <div>Fits up to {maxCapacity}</div>
         <Price>{formatCurrency(regularPrice)}</Price>
         <Discount>{formatCurrency(discount)}</Discount>
-        <button onClick={() => mutate(cabinId)} disabled={isDeleting}>Delete</button>
+        <div>
+            <button onClick={() => setShowForm(!showForm)}>Edit</button>
+            <button onClick={() => mutate(cabinId)} disabled={isDeleting}>Delete</button>
+        </div>
     </TableRow>
+    {showForm && <CreateCabinForm cabinToEdit={cabin} />}
+    </>
 }
 
 export default CabinRow;
